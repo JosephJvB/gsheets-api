@@ -3,3 +3,4 @@ secrets
 .vscode
 dist
 node_modules
+.env
