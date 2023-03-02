@@ -7,7 +7,7 @@
     "addUser": "tsc -b && node dist/local -- addUser",
     "updateUser": "tsc -b && node dist/local -- updateUser",
     "deleteUser": "tsc -b && node dist/local -- deleteUser",
-    "rateLimit": "tsc -b && node dist/local -- rateLimit",
+    "add100Users": "tsc -b && node dist/local -- add100Users",
     "sheetLambda": "node ./test/addSheetRow.js",
     "build": "tsc && node scripts/copyPackageJson && sam build"
   },
