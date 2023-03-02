@@ -1,16 +1,21 @@
 import { google, sheets_v4 } from "googleapis";
 
-const CREDENTIALS_PATH = __dirname + "/../../secrets/service-account.json";
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
-
-export type sheetName = "users";
 
 export default class SheetClient {
   private client: sheets_v4.Sheets;
-  constructor(public spreadsheetId: string, public sheetName: sheetName) {
+  constructor(public spreadsheetId: string, public sheetName: string) {
+    // https://stackoverflow.com/questions/30400341/environment-variables-containing-newlines-in-node
+    const privateKey = process.env.GOOGLE_ACCOUNT_private_key.replace(
+      /\\n/g,
+      "\n"
+    );
     const authClient = new google.auth.GoogleAuth({
       scopes: SCOPES,
-      keyFile: CREDENTIALS_PATH,
+      credentials: {
+        private_key: privateKey,
+        client_email: process.env.GOOGLE_ACCOUNT_client_email,
+      },
     });
     this.client = google.sheets({
       version: "v4",

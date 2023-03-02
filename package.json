@@ -2,9 +2,10 @@
   "name": "sheets-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/local.js",
   "scripts": {
-    "start": "tsc -b && node dist/index"
+    "start": "tsc -b && node dist/local",
+    "build": "tsc && node scripts/copyPackageJson && sam build"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,10 @@
     "googleapis": "^105.0.0"
   },
   "devDependencies": {
-    "@types/node": "^18.14.0"
+    "@types/aws-lambda": "^8.10.111",
+    "@types/axios": "^0.14.0",
+    "@types/node": "^18.14.0",
+    "axios": "^1.3.4",
+    "dotenv": "^16.0.3"
   }
 }

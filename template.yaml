@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: "Google Sheets API"
+
+Parameters:
+  GooglePrivateKey:
+    Type: String
+    Default: "{{resolve:ssm:GoogleSheetPrivateKey:1}}"
+  GoogleClientEmail:
+    Type: String
+    Default: "{{resolve:ssm:GoogleSheetClientEmail:1}}"
+  GoogleSpreadsheetId:
+    Type: String
+    Default: 1h_cKOqg5UIPg-Mfrqj4P0mzcnejTQIgkOJVvil-apgg
+  GoogleUsersSheetName:
+    Type: String
+    Default: Lambda
+
+Globals:
+  Function:
+    Timeout: 10
+    MemorySize: 128
+    Runtime: nodejs14.x
+    Environment:
+      Variables:
+        SPREADSHEET_ID: !Ref GoogleSpreadsheetId
+        USERS_SHEET_NAME: !Ref GoogleUsersSheetName
+        GOOGLE_ACCOUNT_private_key: !Ref GooglePrivateKey
+        GOOGLE_ACCOUNT_client_email: !Ref GoogleClientEmail
+
+Resources:
+  HttpApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: v1
+      Cors:
+        AllowHeaders: "*"
+        AllowMethods: "*"
+        AllowOrigin: "*"
+
+  GoogleSheetsProxyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./dist
+      Handler: googleSheetsProxy.handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: SpotifyProfile
+      Events:
+        GetCreateSheetRow:
+          Type: Api
+          Properties:
+            Path: /
+            Method: post
+            RestApiId: !Ref HttpApiGateway
+        OptionsCreateSheetRow:
+          Type: Api
+          Properties:
+            Path: /
+            Method: options
+            RestApiId: !Ref HttpApiGateway
+
+Outputs:
+  GoogleSheetsProxyFunction:
+    Description: Lambda to manage google sheet data
+    Value: !Ref GoogleSheetsProxyFunction
+  HttpApiGateway:
+    Description: ApiGateway between front end requests and backend lambda
+    Value: !Ref HttpApiGateway

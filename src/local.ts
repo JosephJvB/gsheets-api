@@ -1,8 +1,17 @@
+import dotenv from "dotenv";
 import UserStorage from "./database/userStorage";
+
+dotenv.config({
+  path: __dirname + "/../.env",
+});
 
 void (async function () {
   try {
     const userStorage = new UserStorage();
+    await userStorage.addUser({
+      email: "joevanbo@gmail.com",
+      password: "abc123",
+    });
     // console.time("getUsers");
     // const users = await userStorage.getAllUsers();
     // console.timeEnd("getUsers");

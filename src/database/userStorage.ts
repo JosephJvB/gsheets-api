@@ -5,7 +5,8 @@ export default class UserStorage {
   private sheetClient: SheetClient;
   constructor() {
     const spreadsheetId = process.env.SPREADSHEET_ID;
-    this.sheetClient = new SheetClient(spreadsheetId, "users");
+    const sheetName = process.env.USERS_SHEET_NAME;
+    this.sheetClient = new SheetClient(spreadsheetId, sheetName);
   }
   async getAllUsers(): Promise<User[]> {
     const rows = await this.sheetClient.getRows("A:B");
