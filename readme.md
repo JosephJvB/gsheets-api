@@ -13,3 +13,9 @@ https://docs.google.com/forms/d/e/1FAIpQLSf9tARRwMjd__3wnDxT0aPk6UKHzhszUUzAmbd2
 . local to sheets
 . lambda to sheets
 . form to lambda to ddb
+
+form -> sheet
+https://docs.google.com/forms/d/e/1FAIpQLSfq7ms0cLgq3f9NmP2BpzorowlR54ZOlj1n1q9CbXJ5il1Mew/viewform?usp=sf_link
+
+form -> ddb
+https://docs.google.com/forms/d/e/1FAIpQLScTJH2n-JQaGRqRsOKTpRr2Z58dBxdRdEkZNng5V5MmHuwpoQ/viewform
