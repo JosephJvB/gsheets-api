@@ -7,39 +7,37 @@ dotenv.config({
 
 void (async function () {
   try {
+    const arg = process.argv.slice(2).pop();
+    console.log("LocalGoogleSheetsAPI >", arg);
     const userStorage = new UserStorage();
-    await userStorage.addUser({
-      email: "joevanbo@gmail.com",
-      password: "abc123",
-    });
-    // console.time("getUsers");
-    // const users = await userStorage.getAllUsers();
-    // console.timeEnd("getUsers");
-    // console.log("got users", users.length);
-    // console.log(users.slice(0, 5));
-    // for (let i = 66; i < 100; i++) {
-    //   console.time("addUser");
-    //   await userStorage.addUser({
-    //     email: `user${i}@gmail.com`,
-    //     password: "123",
-    //   });
-    //   console.timeEnd("addUser");
-    // }
-    // console.time("updateUser");
-    // await userStorage.updateUser({
-    //   id: 2,
-    //   email: "updated@gmail.com",
-    //   password: "123abc",
-    // });
-    // console.timeEnd("updateUser");
-    // console.time("deleteUser");
-    // await userStorage.deleteUser(4);
-    // console.timeEnd("deleteUser");
+    switch (arg) {
+      case "addUser":
+        await userStorage.addUser({
+          email: "joevanbo@gmail.com",
+          password: "abc123",
+        });
+        break;
+      case "updateUser":
+        await userStorage.updateUser({
+          id: 1,
+          email: "joevanbo@gmail.com",
+          password: "UPDATED",
+        });
+        break;
+      case "deleteUser":
+        await userStorage.deleteUser(1);
+        break;
+      case "rateLimit":
+        for (let i = 0; i < 100; i++) {
+          await userStorage.addUser({
+            email: "joevanbo@gmail.com",
+            password: "abc123",
+          });
+        }
+        break;
+    }
   } catch (e) {
     console.error(e);
     console.error("failed");
   }
 })();
-
-// getUsers: 803.043ms
-// addUser: 510.233ms

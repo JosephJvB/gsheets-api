@@ -4,7 +4,11 @@
   "description": "",
   "main": "dist/local.js",
   "scripts": {
-    "start": "tsc -b && node dist/local",
+    "addUser": "tsc -b && node dist/local -- addUser",
+    "updateUser": "tsc -b && node dist/local -- updateUser",
+    "deleteUser": "tsc -b && node dist/local -- deleteUser",
+    "rateLimit": "tsc -b && node dist/local -- rateLimit",
+    "sheetLambda": "node ./test/addSheetRow.js",
     "build": "tsc && node scripts/copyPackageJson && sam build"
   },
   "keywords": [],

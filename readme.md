@@ -6,9 +6,6 @@ issues:
     - per project (300 read/write per minute)
     - per user per project (60 read/write per minute)
 
-form link
-https://docs.google.com/forms/d/e/1FAIpQLSf9tARRwMjd__3wnDxT0aPk6UKHzhszUUzAmbd26PE1N_b5Lw/viewform?usp=sf_link
-
 . form to sheets
 . local to sheets
 . lambda to sheets
