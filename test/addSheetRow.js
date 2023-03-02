@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const url = "https://mfj0zjjx8j.execute-api.eu-west-2.amazonaws.com/v1/";
+const url = "https://mfj0zjjx8j.execute-api.eu-west-2.amazonaws.com/v1/sheets";
 
 axios({
   method: "post",

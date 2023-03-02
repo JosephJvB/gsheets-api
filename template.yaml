@@ -15,18 +15,15 @@ Parameters:
   GoogleUsersSheetName:
     Type: String
     Default: Lambda
+  DdbGoogleUsersTable:
+    Type: String
+    Default: GoogleSheetsAPI
 
 Globals:
   Function:
     Timeout: 10
     MemorySize: 128
     Runtime: nodejs14.x
-    Environment:
-      Variables:
-        SPREADSHEET_ID: !Ref GoogleSpreadsheetId
-        USERS_SHEET_NAME: !Ref GoogleUsersSheetName
-        GOOGLE_ACCOUNT_private_key: !Ref GooglePrivateKey
-        GOOGLE_ACCOUNT_client_email: !Ref GoogleClientEmail
 
 Resources:
   HttpApiGateway:
@@ -43,20 +40,48 @@ Resources:
     Properties:
       CodeUri: ./dist
       Handler: googleSheetsProxy.handler
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: SpotifyProfile
+      Environment:
+        Variables:
+          SPREADSHEET_ID: !Ref GoogleSpreadsheetId
+          USERS_SHEET_NAME: !Ref GoogleUsersSheetName
+          GOOGLE_ACCOUNT_private_key: !Ref GooglePrivateKey
+          GOOGLE_ACCOUNT_client_email: !Ref GoogleClientEmail
       Events:
         GetCreateSheetRow:
           Type: Api
           Properties:
-            Path: /
+            Path: /sheets
             Method: post
             RestApiId: !Ref HttpApiGateway
         OptionsCreateSheetRow:
           Type: Api
           Properties:
-            Path: /
+            Path: /sheets
+            Method: options
+            RestApiId: !Ref HttpApiGateway
+
+  GoogleFormsProxyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./dist
+      Handler: googleFormsProxy.handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DdbGoogleUsersTable
+      Environment:
+        Variables:
+          DDB_USER_TABLE: !Ref DdbGoogleUsersTable
+      Events:
+        GetCreateSheetRow:
+          Type: Api
+          Properties:
+            Path: /forms
+            Method: post
+            RestApiId: !Ref HttpApiGateway
+        OptionsCreateSheetRow:
+          Type: Api
+          Properties:
+            Path: /forms
             Method: options
             RestApiId: !Ref HttpApiGateway
 
@@ -64,6 +89,9 @@ Outputs:
   GoogleSheetsProxyFunction:
     Description: Lambda to manage google sheet data
     Value: !Ref GoogleSheetsProxyFunction
+  GoogleFormsProxyFunction:
+    Description: Lambda to insert GoogleForm responses to DDB
+    Value: !Ref GoogleFormsProxyFunction
   HttpApiGateway:
     Description: ApiGateway between front end requests and backend lambda
     Value: !Ref HttpApiGateway
